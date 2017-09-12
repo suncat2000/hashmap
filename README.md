@@ -84,11 +84,15 @@ func main() {
 ### Test & Benchmark
 
 ```
-$ go test hashmap_test.go hashfunc.go hashmap.go
+$ go test hashmap_test.go hashfunc.go hashmap.go -cpu 1
+```
+```
+$ go test hashfunc_test.go hashfunc.go hashmap.go -cpu 1
 ```
 
 ```
 $ go test hashmap_bench_test.go hashfunc.go hashmap.go -bench=. -benchmem -cpu 1
+
 BenchmarkSet16                 	 1000000	      1024 ns/op	     293 B/op	       6 allocs/op
 BenchmarkSet64                 	 1000000	      1033 ns/op	     293 B/op	       6 allocs/op
 BenchmarkSet128                	 1000000	      1001 ns/op	     293 B/op	       6 allocs/op
