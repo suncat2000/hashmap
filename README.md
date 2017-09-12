@@ -7,6 +7,7 @@ Implementation of a Hash map with dynamic types for keys and values in Golang.
 ```bash
 $ github.com/suncat2000/hashmap
 ```
+### Interface
 
 ```go
 type Key interface{}
