@@ -1,6 +1,7 @@
 ### Hashmap
 
 Implementation of a Hash map with dynamic types for keys and values in Golang.
+Hash collision resolved by separate chaining.
 
 ### Download and install
 
