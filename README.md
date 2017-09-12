@@ -2,6 +2,12 @@
 
 Implementation of a Hash map with dynamic types for keys and values in Golang.
 
+### Download and install
+
+```bash
+$ github.com/suncat2000/hashmap
+```
+
 ```go
 type Key interface{}
 
