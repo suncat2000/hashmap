@@ -2,8 +2,6 @@
 
 Implementation of a Hash map with dynamic types for keys and values in Golang.
 
-### Interface
-
 ```go
 type Key interface{}
 
