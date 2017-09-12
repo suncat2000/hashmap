@@ -7,7 +7,7 @@ Hash collision resolved by separate chaining.
 ### Download and install
 
 ```bash
-$ github.com/suncat2000/hashmap
+$ go get github.com/suncat2000/hashmap
 ```
 ### Interface
 
