@@ -25,7 +25,7 @@ type HashMaper interface {
 	Get(key Key) (value interface{}, err error)
 	Unset(key Key) error
 	Count() int
-	Iter() <-chan map[string]interface{}
+	Iter() <-chan KeyValue
 }
 
 // HashMap
@@ -45,6 +45,11 @@ type Bucket struct {
 	value interface{}
 	next *Bucket
 }
+// KeyValue
+type KeyValue struct {
+	key Key
+	value interface{}
+}
 
 // New HashMap.
 func NewHashMap(blockSize int, fn ...func(blockSize int, key Key) (hashKey uint, bucketIdx uint)) HashMaper {
@@ -57,7 +62,7 @@ func NewHashMap(blockSize int, fn ...func(blockSize int, key Key) (hashKey uint,
 	hashMap.halfSlice = true
 
 	if (len(fn) > 0 && fn[0] != nil && isFunc(fn[0])) {
-		fmt.Println(isFunc(fn[0]))
+		//fmt.Println(isFunc(fn[0]))
 		hashMap.hashFunc = fn[0]
 	} else {
 		hashMap.hashFunc = hashFunc
@@ -180,23 +185,20 @@ func (self *HashMap) shrink() {
 }
 
 // iterate
-func (self *HashMap) iterate(c chan<- map[string]interface{}) {
+func (self *HashMap) iterate(c chan<- KeyValue) {
 	//	log.Printf("Iterate %s\n", c)
 	for _, b := range self.buckets {
 		for n := b; n != nil; n = n.next {
-			e := make(map[string]interface{})
-			e["key"] = n.key
-			e["value"] = n.value
-			c <- e
+			c <- KeyValue{n.key, n.value}
 		}
 	}
 	close(c)
 }
 
 // Iter
-func (self *HashMap) Iter() <-chan map[string]interface{} {
+func (self *HashMap) Iter() <-chan KeyValue {
 	//log.Printf("Iter\n")
-	c := make(chan map[string]interface{})
+	c := make(chan KeyValue)
 	go self.iterate(c)
 	return c
 }
@@ -205,7 +207,7 @@ func (self *HashMap) Iter() <-chan map[string]interface{} {
 func (self *HashMap) String() string {
 	s := "{"
 	for r := range self.Iter() {
-		s = s + fmt.Sprintf("%s: %s, ", r["key"], r["value"])
+		s = s + fmt.Sprintf("%s: %s, ", r.key, r.value)
 	}
 	s = s + "}"
 	return s

@@ -14,13 +14,17 @@ $ go get github.com/suncat2000/hashmap
 ```go
 type Key interface{}
 
-// HashMaper interface
+type KeyValue struct {
+	key Key
+	value interface{}
+}
+
 type HashMaper interface {
 	Set(key Key, value interface{}) error
 	Get(key Key) (value interface{}, err error)
 	Unset(key Key) error
 	Count() int
-	Iter() <-chan map[string]interface{}
+	Iter() <-chan KeyValue
 }
 
 func NewHashMap(blockSize int, fn ...func(blockSize int, key Key) (hashKey uint, bucketIdx uint)) HashMaper {}
@@ -83,14 +87,12 @@ func main() {
 
 ### Test & Benchmark
 
-```
+```bash
 $ go test hashmap_test.go hashfunc.go hashmap.go -cpu 1
-```
-```
 $ go test hashfunc_test.go hashfunc.go hashmap.go -cpu 1
 ```
 
-```
+```bash
 $ go test hashmap_bench_test.go hashfunc.go hashmap.go -bench=. -benchmem -cpu 1
 
 BenchmarkSet16                 	 1000000	      1024 ns/op	     293 B/op	       6 allocs/op
@@ -117,4 +119,29 @@ BenchmarkIntNativeMapSet       	 5000000	       247 ns/op	      70 B/op	       0
 BenchmarkStringNativeMapSet    	 2000000	       581 ns/op	      89 B/op	       2 allocs/op
 BenchmarkStringNativeMapGet    	 3000000	       340 ns/op	      45 B/op	       1 allocs/op
 BenchmarkStringNativeMapDelete 	 5000000	       230 ns/op	      28 B/op	       1 allocs/op
+```
+
+```bash
+$ go test hashfunc_bench_test.go hashfunc.go hashmap.go -bench=. -benchmem -cpu 1
+
+BenchmarkIntHashFunc16      	10000000	       180 ns/op	     127 B/op	       2 allocs/op
+BenchmarkIntHashFunc64      	10000000	       179 ns/op	     127 B/op	       2 allocs/op
+BenchmarkIntHashFunc128     	10000000	       181 ns/op	     127 B/op	       2 allocs/op
+BenchmarkIntHashFunc1024    	10000000	       180 ns/op	     127 B/op	       2 allocs/op
+BenchmarkStringHashFunc16   	10000000	       185 ns/op	     132 B/op	       3 allocs/op
+BenchmarkStringHashFunc64   	10000000	       184 ns/op	     132 B/op	       3 allocs/op
+BenchmarkStringHashFunc128  	10000000	       183 ns/op	     132 B/op	       3 allocs/op
+BenchmarkStringHashFunc1024 	10000000	       184 ns/op	     132 B/op	       3 allocs/op
+BenchmarkSliceHashFunc16    	 3000000	       588 ns/op	     208 B/op	       6 allocs/op
+BenchmarkSliceHashFunc64    	 3000000	       574 ns/op	     208 B/op	       6 allocs/op
+BenchmarkSliceHashFunc128   	 3000000	       574 ns/op	     208 B/op	       6 allocs/op
+BenchmarkSliceHashFunc1024  	 3000000	       569 ns/op	     208 B/op	       6 allocs/op
+BenchmarkMapHashFunc16      	 1000000	      1559 ns/op	     605 B/op	      10 allocs/op
+BenchmarkMapHashFunc64      	 1000000	      1552 ns/op	     605 B/op	      10 allocs/op
+BenchmarkMapHashFunc128     	 1000000	      1551 ns/op	     605 B/op	      10 allocs/op
+BenchmarkMapHashFunc1024    	 1000000	      1567 ns/op	     605 B/op	      10 allocs/op
+BenchmarkStructHashFunc16   	 2000000	       687 ns/op	     224 B/op	       6 allocs/op
+BenchmarkStructHashFunc64   	 2000000	       686 ns/op	     224 B/op	       6 allocs/op
+BenchmarkStructHashFunc128  	 2000000	       683 ns/op	     224 B/op	       6 allocs/op
+BenchmarkStructHashFunc1024 	 2000000	       681 ns/op	     224 B/op	       6 allocs/op
 ```

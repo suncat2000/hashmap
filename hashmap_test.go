@@ -2,6 +2,7 @@ package hashmap
 
 import (
 	"testing"
+	"fmt"
 )
 
 const iterationCount = 1000000
@@ -141,4 +142,19 @@ func testStringSet(t *testing.T, blockSize int) {
 
 func TestStringSet1024(t *testing.T) {
 	testStringSet(t, 1024)
+}
+// Iterate
+func TestIterate(t *testing.T) {
+	hashMap := NewHashMap(16)
+
+	for i := 0; i < 100; i++ {
+		err := hashMap.Set(i, i)
+		if err != nil {
+			t.Errorf("Setting error for key %d", i)
+		}
+	}
+
+	for r := range hashMap.Iter() {
+		fmt.Sprintf("%s: %s, ", r.key, r.value)
+	}
 }
