@@ -51,7 +51,7 @@ func NewHashMap(blockSize int, fn ...func(blockSize int, key Key) (hashKey uint,
 	//	log.Printf("New\n")
 	hashMap := new(HashMap)
 	hashMap.defaultBlockSize = blockSize
-	hashMap.buckets = make([]*Bucket, hashMap.defaultBlockSize, (hashMap.defaultBlockSize*2))
+	hashMap.buckets = make([]*Bucket, hashMap.defaultBlockSize)
 	hashMap.size = 0
 	hashMap.shrinked = false
 	hashMap.halfSlice = true
