@@ -45,6 +45,7 @@ type Bucket struct {
 	value interface{}
 	next *Bucket
 }
+
 // KeyValue
 type KeyValue struct {
 	key Key

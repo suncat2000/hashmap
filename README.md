@@ -78,9 +78,10 @@ func main() {
     err := hashMap.Unset([]string{"key"})
     err := hashMap.Unset(Key{"key"})
     ...
+   
     // iterate
     for r := range hashMap.Iter() {
-        fmt.Sprintf("%s: %s, ", r["key"], r["value"])
+        fmt.Sprintf("%s: %s, ", r.key, r.value)
     }
 }
 ```
